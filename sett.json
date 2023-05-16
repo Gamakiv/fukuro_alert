@@ -1,0 +1,72 @@
+{
+  "sett": [
+    {
+      "board": "an",
+      "count": 7
+    },
+    {
+      "board": "b",
+      "count": 49
+    },
+    {
+      "board": "d",
+      "count": 19
+    },
+    {
+      "board": "f",
+      "count": 2
+    },
+    {
+      "board": "hb",
+      "count": 4
+    },
+    {
+      "board": "i2p",
+      "count": 0
+    },
+    {
+      "board": "j",
+      "count": 1
+    },
+    {
+      "board": "k",
+      "count": 10
+    },
+    {
+      "board": "l",
+      "count": 7
+    },
+    {
+      "board": "m",
+      "count": 0
+    },
+    {
+      "board": "p",
+      "count": 11
+    },
+    {
+      "board": "ph",
+      "count": 3
+    },
+    {
+      "board": "prn",
+      "count": 15
+    },
+    {
+      "board": "psy",
+      "count": 1
+    },
+    {
+      "board": "s",
+      "count": 7
+    },
+    {
+      "board": "wr",
+      "count": 0
+    },
+    {
+      "board": "z",
+      "count": 4
+    }
+  ]
+}
