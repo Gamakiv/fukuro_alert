@@ -2,6 +2,7 @@ import json
 import os
 from datetime import datetime
 import pdb
+from xmpp import sender_xmpp
 
 def count_overlapping_substrings(haystack, needle):
     count = 0
@@ -39,11 +40,11 @@ def create_json_set():
 
 
 def get_post_info(path, msg_index):
-#def get_post_info(path):
+    res = []
+
     with open(path + '0.json', 'r', encoding='utf-8') as file:
         data_json = json.load(file)
 
-    #info_list = []
     try:
         sun = data_json['threads'][0]['posts'][0]['sub']
     except KeyError:
@@ -62,6 +63,8 @@ def get_post_info(path, msg_index):
     print(time_post)
     print('--- --- --- --- ---')    
     print('')
+    res = [sun, msg, time_post]
+    return res
 
 
 def read_0(path):
@@ -100,8 +103,11 @@ def allert():
     path = '/home/s300/PythonSource/tg_borda_alert/borda/'
     global sett_count_board
 
-    with open('sett.json', 'r') as file:
-        sett_json = json.load(file)
+    if os.path.exists('sett.json') == False:
+        create_json_set()
+    else:
+        with open('sett.json', 'r') as file:
+            sett_json = json.load(file)
     
     #for debug
     print('All board list = ', get_dir_list(path))
@@ -130,9 +136,13 @@ def allert():
                         print('LastMessIndex =', read_0(path + borda + '/').index(last_mess))
                         print('A new message has been detected! Count = ', sett_count_board)
                         # pdb.set_trace()
-                        get_post_info(path + borda + '/', read_0(path + borda + '/').index(last_mess))
+                        for_send = get_post_info(path + borda + '/', read_0(path + borda + '/').index(last_mess))
                         print('')
                         print('')
+
+                        message_send = 'New message on: ' + borda + '\n' + 'Sub: ' + for_send[0] + '\nMsg: ' + for_send[1] + '\nTime board: ' + for_send[2]
+                           
+                        sender_xmpp('tester@local.at', 'password', 'recip@local.at', message_send)
 
                         #update new count
                         sett_json['sett'][borda_sett]['count'] = last_mess
@@ -147,3 +157,4 @@ def allert():
 
 #-----
 allert()
+
