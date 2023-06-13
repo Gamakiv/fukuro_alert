@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 import pdb
 from xmpp import sender_xmpp
+from gpg import encrypt_message
 
 def count_overlapping_substrings(haystack, needle):
     count = 0
@@ -142,7 +143,7 @@ def allert():
 
                         message_send = 'New message on: ' + borda + '\n' + 'Sub: ' + for_send[0] + '\nMsg: ' + for_send[1] + '\nTime board: ' + for_send[2]
                            
-                        sender_xmpp('tester@local.at', 'password', 'recip@local.at', message_send)
+                        sender_xmpp('tester@local.at', 'password', 'recip@local.at', str(encrypt_message(message_send)))
 
                         #update new count
                         sett_json['sett'][borda_sett]['count'] = last_mess
