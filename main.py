@@ -4,6 +4,9 @@ from datetime import datetime
 import pdb
 from xmpp import sender_xmpp
 from gpg import encrypt_message
+import sh
+import time
+from irc_cli import check_install_ii, run_ii_client
 
 def count_overlapping_substrings(haystack, needle):
     count = 0
@@ -100,6 +103,37 @@ def get_dir_list(path):
     return(res_list_dir)
 
 
+def check_run_ii():
+    #chek status ii (run or stop)
+    #   ps -A -o pid,comm | grep ii 
+    #   156270 ii         
+    output = sh.ps("-A", "-o", "pid,comm") 
+    output_list = output.split()
+    try:
+        print(output_list[output_list.index('ii')-1], 'pid ii client')
+    except ValueError:
+        print('ii client not run! Runing...')
+        run_ii_client() 
+    return True
+
+
+def send_message_irc(message):
+
+    chanell = '/privmsg #812alfa '
+    filepath = '/tmp/127.0.0.1/#812alfa/in'
+
+    if check_run_ii():
+        print('IDENTIFY user....')
+        f = open('/tmp/127.0.0.1/in', 'w')
+        f.write('/privmsg NickServ IDENTIFY qweasdzcQAZ' + '\n')        
+        time.sleep(3)
+        f.write('/join #812alfa ')
+        f.close()
+
+        print('Send message: ', message)
+        sh.echo(chanell+message, _out=filepath)
+
+
 def allert():
     path = '/home/s300/PythonSource/tg_borda_alert/borda/'
     global sett_count_board
@@ -144,6 +178,7 @@ def allert():
                         message_send = 'New message on: ' + borda + '\n' + 'Sub: ' + for_send[0] + '\nMsg: ' + for_send[1] + '\nTime board: ' + for_send[2]
                            
                         sender_xmpp('tester@local.at', 'password', 'recip@local.at', str(encrypt_message(message_send)))
+                        send_message_irc(message_send)
 
                         #update new count
                         sett_json['sett'][borda_sett]['count'] = last_mess
@@ -158,4 +193,5 @@ def allert():
 
 #-----
 allert()
+#send_message_irc('pop')
 
